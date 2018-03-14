@@ -10,5 +10,6 @@ defmodule RefranerServerWeb.Router do
 
     get("/random", RefranController, :get_random_refran)
     get("/:refran_id", RefranController, :get_refran)
+    patch("/:refran_id", RefranController, :add_rating)
   end
 end

@@ -10,13 +10,13 @@ defmodule RefranerServer.Refraner do
   end
 
   def get_refran(id) do
-    id = id_to_integer(id)
+    id = string_to_integer(id)
     RefranerServer.Model.Refran |> RefranerServer.Repo.get(id)
   end
 
   def add_rating(refran_id, new_rate) do
-    refran_id = id_to_integer(refran_id)
-    new_rate = String.to_integer(new_rate)
+    refran_id = string_to_integer(refran_id)
+    new_rate = string_to_integer(new_rate)
     %{rate: rate, total_votos: total_votos} = refran = get_refran(refran_id)
     {new_rate, new_total_votos} = calculate_new_rate(rate, total_votos, new_rate)
 
