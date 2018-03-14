@@ -1,0 +1,14 @@
+:host = 127.0.0.1
+:port = 4000
+
+:common_headers = Content-Type: application/json
+
+# GET random refran
+GET http://:host::port/api/refran/random
+:common_headers
+
+# GET refran by id
+:id = 1
+
+GET http://:host::port/api/refran/:id
+:common_headers
