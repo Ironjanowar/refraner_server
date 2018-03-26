@@ -1,6 +1,7 @@
 defmodule RefranerServer.Refraner do
+  alias RefranerServer.Model.Vote
   import RefranerServer.Refraner.Utils
-  import Ecto.Query, only: [from: 2]
+  import Ecto.Query
 
   def get_random_refran() do
     q =
@@ -14,16 +15,28 @@ defmodule RefranerServer.Refraner do
     RefranerServer.Model.Refran |> RefranerServer.Repo.get(id)
   end
 
-  def add_rating(refran_id, new_rate) do
-    refran_id = string_to_integer(refran_id)
-    new_rate = string_to_integer(new_rate)
-    %{rate: rate, total_votos: total_votos} = refran = get_refran(refran_id)
-    {new_rate, new_total_votos} = calculate_new_rate(rate, total_votos, new_rate)
+  def get_user_vote(tg_user_id, refran_id) do
+    case RefranerServer.Model.Vote
+         |> RefranerServer.Repo.get_by(tg_user_id: tg_user_id, refran_id: refran_id) do
+      nil -> {:error, {:not_found, "Telegram User #{inspect(tg_user_id)} not found"}}
+      vote -> {:ok, vote}
+    end
+  end
 
-    RefranerServer.Model.Refran.update_rate(refran, %{
-      rate: new_rate,
-      total_votos: new_total_votos
-    })
-    |> RefranerServer.Repo.update()
+  def add_vote(tg_user_id, refran_id, new_vote) do
+    refran_id = string_to_integer(refran_id)
+    tg_user_id = string_to_integer(tg_user_id)
+    new_vote = string_to_integer(new_vote)
+
+    vote = %Vote{
+      tg_user_id: tg_user_id,
+      refran_id: refran_id,
+      vote: new_vote
+    }
+
+    case RefranerServer.Repo.insert(vote) do
+      {:ok, _} = res_ok -> res_ok
+      _ -> {:error, "Could not insert vote #{inspect(vote)}"}
+    end
   end
 end

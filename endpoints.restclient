@@ -3,18 +3,27 @@
 
 :common_headers = Content-Type: application/json
 
+:refran_id = 1
+:tg_user_id = 123
+:vote = 5
+
 # GET random refran
 GET http://:host::port/api/refran/random
 :common_headers
 
 # GET refran by id
-:id = 1
-
-GET http://:host::port/api/refran/:id
+GET http://:host::port/api/refran/:refran_id
 :common_headers
 
 # Update rating
-PATCH http://:host::port/api/refran/:id
+POST http://:host::port/api/refran/:refran_id/vote
 :common_headers
 
-{"rate": 5}
+{
+"tg_user_id": :tg_user_id,
+"vote": :vote
+}
+
+# Get rate
+GET http://:host::port/api/refran/:refran_id/vote/:tg_user_id
+:common_headers

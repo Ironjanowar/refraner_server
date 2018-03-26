@@ -10,6 +10,8 @@ defmodule RefranerServerWeb.Router do
 
     get("/random", RefranController, :get_random_refran)
     get("/:refran_id", RefranController, :get_refran)
-    patch("/:refran_id", RefranController, :add_rating)
+
+    post("/:refran_id/vote", VoteController, :add_vote)
+    get("/:refran_id/vote/:tg_user_id", VoteController, :get_user_vote)
   end
 end
