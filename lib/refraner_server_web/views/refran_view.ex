@@ -6,6 +6,7 @@ defmodule RefranerServerWeb.RefranView do
   end
 
   @refran_json_fields [
+    :id,
     :refran,
     :significado,
     :rate,
