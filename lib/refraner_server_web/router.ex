@@ -12,6 +12,6 @@ defmodule RefranerServerWeb.Router do
     get("/:refran_id", RefranController, :get_refran)
 
     post("/:refran_id/vote", VoteController, :add_vote)
-    get("/:refran_id/vote/:tg_user_id", VoteController, :get_user_vote)
+    get("/:refran_id/vote/user/:tg_user_id", VoteController, :get_user_vote)
   end
 end
