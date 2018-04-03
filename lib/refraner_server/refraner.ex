@@ -31,11 +31,11 @@ defmodule RefranerServer.Refraner do
 
     case get_user_vote(tg_user_id, refran_id) do
       {:ok, %{vote: ^new_vote} = result} ->
-	{:ok, result}
-	
+        {:ok, result}
+
       {:ok, saved_vote} ->
         Vote.update_vote(saved_vote, new_vote)
-	
+
       {:error, _} ->
         Vote.insert_vote(%Vote{
           tg_user_id: tg_user_id,
