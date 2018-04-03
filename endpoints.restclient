@@ -25,5 +25,5 @@ POST http://:host::port/api/refran/:refran_id/vote
 }
 
 # Get rate
-GET http://:host::port/api/refran/:refran_id/vote/:tg_user_id
+GET http://:host::port/api/refran/:refran_id/vote/user/:tg_user_id
 :common_headers
