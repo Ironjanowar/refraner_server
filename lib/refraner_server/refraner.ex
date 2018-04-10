@@ -38,15 +38,6 @@ defmodule RefranerServer.Refraner do
     end
   end
 
-  def get_user_vote(tg_user_id, refran_id) do
-    with {:ok, _} <- get_refran(refran_id),
-         {:ok, vote} <- get_vote(tg_user_id, refran_id) do
-      {:ok, vote}
-    else
-      err -> err
-    end
-  end
-
   def add_vote(tg_user_id, refran_id, new_vote) when is_binary(new_vote) do
     new_vote = string_to_integer(new_vote)
     add_vote(tg_user_id, refran_id, new_vote)

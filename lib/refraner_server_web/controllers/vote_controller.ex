@@ -24,10 +24,10 @@ defmodule RefranerServerWeb.VoteController do
   end
 
   def get_user_vote(conn, %{"tg_user_id" => tg_user_id, "refran_id" => refran_id}) do
-    case RefranerServer.Refraner.get_user_vote(tg_user_id, refran_id) do
-      {:ok, vote} ->
-        render(conn, "vote.json", %{vote: vote})
-
+    with {:ok, _} <- get_refran(refran_id),
+         {:ok, vote} <- get_vote(tg_user_id, refran_id) do
+      render(conn, "vote.json", %{vote: vote})
+    else
       {:error, {:not_found, error_message, errors}} ->
         conn
         |> put_status(404)
