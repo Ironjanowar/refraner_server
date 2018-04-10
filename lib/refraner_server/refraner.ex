@@ -23,18 +23,27 @@ defmodule RefranerServer.Refraner do
     end
   end
 
-  def get_user_vote(tg_user_id, refran_id) do
-    with {:ok, _} <- get_refran(refran_id),
-         nil <- Vote |> RefranerServer.Repo.get_by(tg_user_id: tg_user_id, refran_id: refran_id) do
-      {:error,
-       {:not_found, "Telegram User #{tg_user_id} not found for Refran ID #{refran_id}",
-        %{tg_user_id: "not_found"}}}
-    else
-      {:error, _} = err ->
-        err
+  defp get_vote(tg_user_id, refran_id) do
+    tg_user_id = string_to_integer(tg_user_id)
+    refran_id = string_to_integer(refran_id)
+
+    case Vote |> RefranerServer.Repo.get_by(tg_user_id: tg_user_id, refran_id: refran_id) do
+      nil ->
+        {:error,
+         {:not_found, "Telegram User #{tg_user_id} not found for Refran ID #{refran_id}",
+          %{tg_user_id: "not_found"}}}
 
       vote ->
         {:ok, vote}
+    end
+  end
+
+  def get_user_vote(tg_user_id, refran_id) do
+    with {:ok, _} <- get_refran(refran_id),
+         {:ok, vote} <- get_vote(tg_user_id, refran_id) do
+      {:ok, vote}
+    else
+      err -> err
     end
   end
 
