@@ -13,23 +13,43 @@ defmodule RefranerServer.Refraner do
 
   def get_refran(id) do
     id = string_to_integer(id)
-    Refran |> RefranerServer.Repo.get(id)
+
+    case Refran |> RefranerServer.Repo.get(id) do
+      nil ->
+        {:error, {:not_found, "Refran ID #{inspect(id)} not found", %{refran_id: "not_found"}}}
+
+      refran ->
+        {:ok, refran}
+    end
   end
 
   def get_user_vote(tg_user_id, refran_id) do
-    case Vote
-         |> RefranerServer.Repo.get_by(tg_user_id: tg_user_id, refran_id: refran_id) do
-      nil ->
-        {:error,
-         {:not_found,
-          "Telegram User #{inspect(tg_user_id)} not found for Refran ID #{inspect(refran_id)}"}}
+    with {:ok, _} <- get_refran(refran_id),
+         nil <- Vote |> RefranerServer.Repo.get_by(tg_user_id: tg_user_id, refran_id: refran_id) do
+      {:error,
+       {:not_found, "Telegram User #{tg_user_id} not found for Refran ID #{refran_id}",
+        %{tg_user_id: "not_found"}}}
+    else
+      {:error, _} = err ->
+        err
 
       vote ->
         {:ok, vote}
     end
   end
 
-  def add_vote(tg_user_id, refran_id, new_vote) do
+  def add_vote(tg_user_id, refran_id, new_vote) when is_binary(new_vote) do
+    new_vote = string_to_integer(new_vote)
+    add_vote(tg_user_id, refran_id, new_vote)
+  end
+
+  def add_vote(_tg_user_id, _refran_id, new_vote) when new_vote < 1 or 5 < new_vote,
+    do:
+      {:error,
+       {:not_in_range, "Vote should be between 1 and 5, received vote is #{inspect(new_vote)}",
+        %{vote: "not_in_range"}}}
+
+  def add_vote(tg_user_id, refran_id, new_vote) when is_integer(new_vote) do
     refran_id = string_to_integer(refran_id)
     tg_user_id = string_to_integer(tg_user_id)
     new_vote = string_to_integer(new_vote)
@@ -40,6 +60,9 @@ defmodule RefranerServer.Refraner do
 
       {:ok, saved_vote} ->
         Vote.update_vote(saved_vote, new_vote)
+
+      {:error, {:not_found, _error_message, %{refran_id: "not_found"}}} = err ->
+        err
 
       {:error, _} ->
         Vote.insert_vote(%Vote{

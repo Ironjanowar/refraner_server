@@ -4,8 +4,8 @@
 :common_headers = Content-Type: application/json
 
 :refran_id = 1
-:tg_user_id = 123
-:vote = 5
+:tg_user_id = 1223
+:vote = 8
 
 # GET random refran
 GET http://:host::port/api/refran/random

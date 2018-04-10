@@ -1,8 +1,6 @@
 defmodule RefranerServer.Model.Refran do
   use Ecto.Schema
 
-  alias __MODULE__
-
   schema "refranes" do
     field(:refran, :string)
     field(:significado, :string)
