@@ -23,7 +23,7 @@ defmodule RefranerServer.Refraner do
     end
   end
 
-  defp get_vote(tg_user_id, refran_id) do
+  def get_vote(tg_user_id, refran_id) do
     tg_user_id = string_to_integer(tg_user_id)
     refran_id = string_to_integer(refran_id)
 
@@ -54,7 +54,7 @@ defmodule RefranerServer.Refraner do
     tg_user_id = string_to_integer(tg_user_id)
     new_vote = string_to_integer(new_vote)
 
-    case get_user_vote(tg_user_id, refran_id) do
+    case get_vote(tg_user_id, refran_id) do
       {:ok, %{vote: ^new_vote} = result} ->
         {:ok, result}
 

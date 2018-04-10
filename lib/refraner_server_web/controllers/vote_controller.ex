@@ -2,9 +2,10 @@ defmodule RefranerServerWeb.VoteController do
   use RefranerServerWeb, :controller
 
   alias RefranerServerWeb.ErrorView
+  alias RefranerServer.Refraner
 
   def add_vote(conn, %{"tg_user_id" => tg_user_id, "refran_id" => refran_id, "vote" => vote}) do
-    case RefranerServer.Refraner.add_vote(tg_user_id, refran_id, vote) do
+    case Refraner.add_vote(tg_user_id, refran_id, vote) do
       {:ok, _} ->
         send_resp(conn, 201, "")
 
@@ -24,8 +25,8 @@ defmodule RefranerServerWeb.VoteController do
   end
 
   def get_user_vote(conn, %{"tg_user_id" => tg_user_id, "refran_id" => refran_id}) do
-    with {:ok, _} <- get_refran(refran_id),
-         {:ok, vote} <- get_vote(tg_user_id, refran_id) do
+    with {:ok, _} <- Refraner.get_refran(refran_id),
+         {:ok, vote} <- Refraner.get_vote(tg_user_id, refran_id) do
       render(conn, "vote.json", %{vote: vote})
     else
       {:error, {:not_found, error_message, errors}} ->
