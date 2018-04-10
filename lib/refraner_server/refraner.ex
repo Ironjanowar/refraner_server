@@ -19,8 +19,13 @@ defmodule RefranerServer.Refraner do
   def get_user_vote(tg_user_id, refran_id) do
     case Vote
          |> RefranerServer.Repo.get_by(tg_user_id: tg_user_id, refran_id: refran_id) do
-      nil -> {:error, {:not_found, "Telegram User #{inspect(tg_user_id)} not found"}}
-      vote -> {:ok, vote}
+      nil ->
+        {:error,
+         {:not_found,
+          "Telegram User #{inspect(tg_user_id)} not found for Refran ID #{inspect(refran_id)}"}}
+
+      vote ->
+        {:ok, vote}
     end
   end
 
