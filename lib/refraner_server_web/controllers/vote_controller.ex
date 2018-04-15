@@ -5,10 +5,10 @@ defmodule RefranerServerWeb.VoteController do
   alias RefranerServer.Refraner
 
   def add_vote(conn, %{"tg_user_id" => tg_user_id, "refran_id" => refran_id, "vote" => vote}) do
-    case Refraner.add_vote(tg_user_id, refran_id, vote) do
-      {:ok, _} ->
-        send_resp(conn, 201, "")
-
+    with {:ok, _} <- Refraner.get_refran(refran_id),
+         {:ok, _} <- Refraner.add_vote(tg_user_id, refran_id, vote) do
+      send_resp(conn, 201, "")
+    else
       {:error, {:not_in_range, error_message, errors}} ->
         conn
         |> put_status(400)
@@ -19,8 +19,8 @@ defmodule RefranerServerWeb.VoteController do
         |> put_status(404)
         |> render(ErrorView, "404.json", %{error_message: error_message, errors: errors})
 
-      {:error, err} ->
-        send_resp(conn, 500, err)
+      _ ->
+        render(conn, ErrorView, "500.json")
     end
   end
 
