@@ -1,19 +1,40 @@
-# RefranerServer
+# RefranerServer (Bot)
 
-To start your Phoenix server:
+## Dependencies
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
-  * Start Phoenix endpoint with `mix phx.server`
+- Elixir
+- Git
+- GNU Make
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+## Quick run
 
-Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
+    $ make run
 
-## Learn more
+## Install (systemd)
 
-  * Official website: http://www.phoenixframework.org/
-  * Guides: http://phoenixframework.org/docs/overview
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+Move the code to /opt and set permissions:
+
+    # cd ..
+    # cp -R refraner_server /opt
+    # chown -R www-data:www-data /opt/refraner_server
+
+Install the systemd service and enable it to run at startup:
+
+    # cp refraner_server/refraner_server.service.sample /etc/systemd/system/refraner_server.service
+    # systemctl daemon-reload
+    # systemctl enable refraner_server
+
+NOTE: if you chose to deploy the code to another path or use another user/group,
+update them in /etc/systemd/system/refraner_server.service after copying the template.
+
+## Run (systemd)
+
+After installing it, you can control the service via systemd:
+
+    # systemctl start refraner_server
+    # systemctl stop refraner_server
+    # systemctl restart refraner_server
+
+## Start on system startup (systemd)
+
+    # systemctl enable refraner_server
