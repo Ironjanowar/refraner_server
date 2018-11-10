@@ -1,5 +1,5 @@
 [Unit]
-Description=Refraner bot
+Description=Refraner server
 After=network.target
 
 [Service]
