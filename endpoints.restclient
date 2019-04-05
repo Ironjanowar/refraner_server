@@ -11,6 +11,10 @@
 GET http://:host::port/api/refran/random
 :common_headers
 
+# GET random filtering by language
+GET http://:host::port/api/refran/random?language=FR
+:common_headers1
+
 # GET refran by id
 GET http://:host::port/api/refran/:refran_id
 :common_headers
