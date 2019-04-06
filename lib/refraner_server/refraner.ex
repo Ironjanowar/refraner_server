@@ -15,7 +15,8 @@ defmodule RefranerServer.Refraner do
   def get_random_refran(opts \\ []) do
     from(refran in Refran,
       order_by: [asc: fragment("RANDOM()")],
-      limit: 1
+      limit: 1,
+      where: not is_nil(refran.refran)
     )
     |> apply_filters(opts)
     |> RefranerServer.Repo.one()
@@ -81,5 +82,10 @@ defmodule RefranerServer.Refraner do
           vote: new_vote
         })
     end
+  end
+
+  def get_languages() do
+    from(refran in Refran, distinct: true, select: refran.idioma_codigo)
+    |> RefranerServer.Repo.all()
   end
 end
