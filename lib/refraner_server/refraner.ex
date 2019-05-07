@@ -5,10 +5,21 @@ defmodule RefranerServer.Refraner do
   import RefranerServer.Refraner.Utils
   import Ecto.Query
 
-  def get_random_refran() do
-    q = from(refran in Refran, order_by: [asc: fragment("RANDOM()")], limit: 1)
+  defp apply_filter({"language", language}, q),
+    do: from(refran in q, where: refran.idioma_codigo == ^language)
 
-    RefranerServer.Repo.one(q)
+  defp apply_filter(_, q), do: q
+
+  defp apply_filters(query, opts), do: Enum.reduce(opts, query, &apply_filter/2)
+
+  def get_random_refran(opts \\ []) do
+    from(refran in Refran,
+      order_by: [asc: fragment("RANDOM()")],
+      limit: 1,
+      where: not is_nil(refran.refran)
+    )
+    |> apply_filters(opts)
+    |> RefranerServer.Repo.one()
   end
 
   def get_refran(id) do
@@ -71,5 +82,10 @@ defmodule RefranerServer.Refraner do
           vote: new_vote
         })
     end
+  end
+
+  def get_languages() do
+    from(refran in Refran, distinct: true, select: refran.idioma_codigo)
+    |> RefranerServer.Repo.all()
   end
 end

@@ -3,8 +3,21 @@ defmodule RefranerServerWeb.RefranController do
 
   alias RefranerServerWeb.ErrorView
 
-  def get_random_refran(conn, _params) do
-    render(conn, "refran.json", %{refran: RefranerServer.Refraner.get_random_refran()})
+  def get_random_refran(conn, params) do
+    case RefranerServer.Refraner.get_random_refran(params) do
+      nil ->
+        conn
+        |> put_status(404)
+        |> render(ErrorView, "404.json", %{
+          error_message: "No refranes with that filter",
+          errors: nil
+        })
+
+      refran ->
+        render(conn, "refran.json", %{
+          refran: refran
+        })
+    end
   end
 
   def get_refran(conn, %{"refran_id" => refran_id}) do
