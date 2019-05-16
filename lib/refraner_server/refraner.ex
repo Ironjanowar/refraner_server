@@ -8,6 +8,11 @@ defmodule RefranerServer.Refraner do
   defp apply_filter({"language", language}, q),
     do: from(refran in q, where: refran.idioma_codigo == ^language)
 
+  defp apply_filter({"search", search_query}, q) do
+    search_query = "%#{search_query}%"
+    from(refran in q, where: like(refran.refran, ^search_query))
+  end
+
   defp apply_filter(_, q), do: q
 
   defp apply_filters(query, opts), do: Enum.reduce(opts, query, &apply_filter/2)

@@ -15,6 +15,10 @@ GET http://:host::port/api/refranes
 GET http://:host::port/api/refranes?count=10&language=ES
 :common_headers
 
+# GET random refran
+GET http://:host::port/api/refranes?count=10&language=ES&search=divide
+:common_headers
+
 # GET random filtering by language
 GET http://:host::port/api/refranes?language=EN
 :common_headers
