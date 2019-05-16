@@ -8,11 +8,15 @@
 :vote = 8
 
 # GET random refran
-GET http://:host::port/api/refran/random
+GET http://:host::port/api/refranes
+:common_headers
+
+# GET random refran
+GET http://:host::port/api/refranes?count=10&language=ES
 :common_headers
 
 # GET random filtering by language
-GET http://:host::port/api/refran/random?language=EN
+GET http://:host::port/api/refranes?language=EN
 :common_headers
 
 # GET available languages
@@ -20,11 +24,11 @@ GET http://:host::port/api/languages
 :common_headers
 
 # GET refran by id
-GET http://:host::port/api/refran/:refran_id
+GET http://:host::port/api/refranes/:refran_id
 :common_headers
 
 # Update rating
-POST http://:host::port/api/refran/:refran_id/vote
+POST http://:host::port/api/refranes/:refran_id/vote
 :common_headers
 
 {
@@ -33,5 +37,5 @@ POST http://:host::port/api/refran/:refran_id/vote
 }
 
 # Get rate
-GET http://:host::port/api/refran/:refran_id/vote/user/:tg_user_id
+GET http://:host::port/api/refranes/:refran_id/vote/user/:tg_user_id
 :common_headers

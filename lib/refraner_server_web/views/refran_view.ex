@@ -1,8 +1,8 @@
 defmodule RefranerServerWeb.RefranView do
   use RefranerServerWeb, :view
 
-  def render("refran.json", %{refran: refran}) do
-    refran_json(refran)
+  def render("refran.json", %{refranes: refranes}) do
+    refranes |> Enum.map(&refran_json/1)
   end
 
   @refran_json_fields [

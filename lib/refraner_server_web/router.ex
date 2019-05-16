@@ -5,10 +5,10 @@ defmodule RefranerServerWeb.Router do
     plug(:accepts, ["json"])
   end
 
-  scope "/api/refran", RefranerServerWeb do
+  scope "/api/refranes", RefranerServerWeb do
     pipe_through(:api)
 
-    get("/random", RefranController, :get_random_refran)
+    get("/", RefranController, :get_refranes)
     get("/:refran_id", RefranController, :get_refran)
 
     post("/:refran_id/vote", VoteController, :add_vote)

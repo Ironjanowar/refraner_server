@@ -12,14 +12,16 @@ defmodule RefranerServer.Refraner do
 
   defp apply_filters(query, opts), do: Enum.reduce(opts, query, &apply_filter/2)
 
-  def get_random_refran(opts \\ []) do
+  def get_refranes(opts \\ []) do
+    limit = opts["count"] || 1
+
     from(refran in Refran,
       order_by: [asc: fragment("RANDOM()")],
-      limit: 1,
+      limit: ^limit,
       where: not is_nil(refran.refran)
     )
     |> apply_filters(opts)
-    |> RefranerServer.Repo.one()
+    |> RefranerServer.Repo.all()
   end
 
   def get_refran(id) do
