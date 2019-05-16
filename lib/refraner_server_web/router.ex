@@ -8,7 +8,7 @@ defmodule RefranerServerWeb.Router do
   scope "/api/refranes", RefranerServerWeb do
     pipe_through(:api)
 
-    get("/", RefranController, :get_refranes)
+    get("/", RefranesController, :get_refranes)
     get("/:refran_id", RefranController, :get_refran)
 
     post("/:refran_id/vote", VoteController, :add_vote)
